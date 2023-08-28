@@ -13,16 +13,41 @@
   <h1>Filtrar e exibir dados da planilha</h1>
   
   <!-- Campos de pesquisa -->
-  <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquisar...">
+  <div class="mb-2">
+    <label for="searchNome" class="form-label">Nome:</label>
+    <input type="text" id="searchNome" class="form-control" placeholder="Pesquisar por Nome">
+  </div>
+  <div class="mb-2">
+    <label for="searchTelefone" class="form-label">Telefone:</label>
+    <input type="text" id="searchTelefone" class="form-control" placeholder="Pesquisar por Telefone">
+  </div>
+  <div class="mb-2">
+    <label for="searchEmail" class="form-label">Email:</label>
+    <input type="text" id="searchEmail" class="form-control" placeholder="Pesquisar por Email">
+  </div>
+  <div class="mb-2">
+    <label for="searchFuncao" class="form-label">Função:</label>
+    <input type="text" id="searchFuncao" class="form-control" placeholder="Pesquisar por Função">
+  </div>
+  <div class="mb-2">
+    <label for="searchEmpresa" class="form-label">Empresa:</label>
+    <input type="text" id="searchEmpresa" class="form-control" placeholder="Pesquisar por Empresa">
+  </div>
+  <div class="mb-2">
+    <label for="searchIndicacao" class="form-label">Indicação:</label>
+    <input type="text" id="searchIndicacao" class="form-control" placeholder="Pesquisar por Indicação">
+  </div>
   
   <!-- Tabela para exibir dados -->
   <table class="table table-bordered">
     <thead>
       <tr>
         <th>Nome</th>
-        <th>Idade</th>
+        <th>Telefone</th>
         <th>Email</th>
-        <th>Cidade</th>
+        <th>Função</th>
+        <th>Empresa</th>
+        <th>Indicação</th>
       </tr>
     </thead>
     <tbody id="tableBody">
@@ -33,7 +58,12 @@
 
 <script>
   // Elementos HTML
-  const searchInput = document.getElementById("searchInput");
+  const searchNome = document.getElementById("searchNome");
+  const searchTelefone = document.getElementById("searchTelefone");
+  const searchEmail = document.getElementById("searchEmail");
+  const searchFuncao = document.getElementById("searchFuncao");
+  const searchEmpresa = document.getElementById("searchEmpresa");
+  const searchIndicacao = document.getElementById("searchIndicacao");
   const tableBody = document.getElementById("tableBody");
 
   // Função para carregar os dados do arquivo CSV
@@ -47,17 +77,21 @@
       tableBody.innerHTML = "";
       rows.forEach(row => {
         const columns = row.split(",");
-        const name = columns[0];
-        const age = columns[1];
+        const nome = columns[0];
+        const telefone = columns[1];
         const email = columns[2];
-        const city = columns[3];
+        const funcao = columns[3];
+        const empresa = columns[4];
+        const indicacao = columns[5];
 
         const newRow = document.createElement("tr");
         newRow.innerHTML = `
-          <td>${name}</td>
-          <td>${age}</td>
+          <td>${nome}</td>
+          <td>${telefone}</td>
           <td>${email}</td>
-          <td>${city}</td>
+          <td>${funcao}</td>
+          <td>${empresa}</td>
+          <td>${indicacao}</td>
         `;
 
         tableBody.appendChild(newRow);
@@ -73,19 +107,39 @@
   });
 
   // Atualizar a tabela ao pesquisar
-  searchInput.addEventListener("input", () => {
-    const searchTerm = searchInput.value.toLowerCase();
+  function updateTable() {
+    const searchNomeValue = searchNome.value.toLowerCase();
+    const searchTelefoneValue = searchTelefone.value.toLowerCase();
+    const searchEmailValue = searchEmail.value.toLowerCase();
+    const searchFuncaoValue = searchFuncao.value.toLowerCase();
+    const searchEmpresaValue = searchEmpresa.value.toLowerCase();
+    const searchIndicacaoValue = searchIndicacao.value.toLowerCase();
     const rows = tableBody.getElementsByTagName("tr");
 
     for (const row of rows) {
       const rowData = row.textContent.toLowerCase();
-      if (rowData.includes(searchTerm)) {
+      const nomeCell = rowData.includes(searchNomeValue);
+      const telefoneCell = rowData.includes(searchTelefoneValue);
+      const emailCell = rowData.includes(searchEmailValue);
+      const funcaoCell = rowData.includes(searchFuncaoValue);
+      const empresaCell = rowData.includes(searchEmpresaValue);
+      const indicacaoCell = rowData.includes(searchIndicacaoValue);
+      
+      if (nomeCell && telefoneCell && emailCell && funcaoCell && empresaCell && indicacaoCell) {
         row.style.display = "";
       } else {
         row.style.display = "none";
       }
     }
-  });
+  }
+
+  // Atualizar a tabela ao digitar nos campos de pesquisa
+  searchNome.addEventListener("input", updateTable);
+  searchTelefone.addEventListener("input", updateTable);
+  searchEmail.addEventListener("input", updateTable);
+  searchFuncao.addEventListener("input", updateTable);
+  searchEmpresa.addEventListener("input", updateTable);
+  searchIndicacao.addEventListener("input", updateTable);
 </script>
 
 </body>
