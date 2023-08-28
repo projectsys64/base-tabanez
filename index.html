@@ -1,103 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Google Sheets Data Filter</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filtrar e exibir dados da planilha</title>
+  <!-- Adicione os links para as bibliotecas Bootstrap e JavaScript -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
 
 <div class="container mt-5">
-  <h1>Google Sheets Data Filter</h1>
-  <div class="row mt-3">
-    <div class="col-md-3">
-      <input type="text" id="searchField1" class="form-control" placeholder="Search Field 1">
-    </div>
-    <div class="col-md-3">
-      <input type="text" id="searchField2" class="form-control" placeholder="Search Field 2">
-    </div>
-    <div class="col-md-3">
-      <input type="text" id="searchField3" class="form-control" placeholder="Search Field 3">
-    </div>
-    <div class="col-md-3">
-      <input type="text" id="searchField4" class="form-control" placeholder="Search Field 4">
-    </div>
-  </div>
-  <div class="row mt-3">
-    <div class="col">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
-            <th>Column 3</th>
-            <th>Column 4</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <!-- Table data will be populated here using JavaScript -->
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <h1>Filtrar e exibir dados da planilha</h1>
+  
+  <!-- Campos de pesquisa -->
+  <input type="text" id="searchInput" class="form-control mb-2" placeholder="Pesquisar...">
+  
+  <!-- Tabela para exibir dados -->
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Idade</th>
+        <th>Email</th>
+        <th>Cidade</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <!-- Os dados da planilha serão preenchidos aqui -->
+    </tbody>
+  </table>
 </div>
 
 <script>
-// Replace 'YOUR_GOOGLE_SHEET_URL' with the actual URL of your Google Sheets CSV file
-const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTzV8s4dSeYNg9h5-vDDoOHL4QpWjiAO07KF9FvLRlI_ZMFBZyJLDY1UjQLXCinRGMLUL4tDT-vZFDl/pub?output=csv';
+  // URL da planilha CSV
+  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTzV8s4dSeYNg9h5-vDDoOHL4QpWjiAO07KF9FvLRlI_ZMFBZyJLDY1UjQLXCinRGMLUL4tDT-vZFDl/pub?output=csv";
+  
+  // Elementos HTML
+  const searchInput = document.getElementById("searchInput");
+  const tableBody = document.getElementById("tableBody");
 
-// Fetch data from Google Sheets and populate the table
-async function fetchData() {
-  const response = await fetch(googleSheetUrl);
-  const textData = await response.text();
-  const rows = textData.split('\n');
-  const headers = rows[0].split(',');
+  // Função para carregar os dados da planilha e criar a tabela
+  async function loadAndDisplayData() {
+    try {
+      const response = await fetch(csvUrl);
+      const csvData = await response.text();
+      const rows = csvData.split("\n");
 
-  const searchFields = [
-    document.getElementById('searchField1'),
-    document.getElementById('searchField2'),
-    document.getElementById('searchField3'),
-    document.getElementById('searchField4')
-  ];
+      // Preencher a tabela com os dados
+      tableBody.innerHTML = "";
+      rows.forEach(row => {
+        const columns = row.split(",");
+        const name = columns[0];
+        const age = columns[1];
+        const email = columns[2];
+        const city = columns[3];
 
-  const tableBody = document.getElementById('tableBody');
-  tableBody.innerHTML = '';
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+          <td>${name}</td>
+          <td>${age}</td>
+          <td>${email}</td>
+          <td>${city}</td>
+        `;
 
-  for (let i = 1; i < rows.length; i++) {
-    const rowData = rows[i].split(',');
-    let shouldDisplay = true;
-
-    for (let j = 0; j < headers.length; j++) {
-      const searchValue = searchFields[j].value.toLowerCase();
-      const cellValue = rowData[j].toLowerCase();
-
-      if (searchValue && cellValue.indexOf(searchValue) === -1) {
-        shouldDisplay = false;
-        break;
-      }
-    }
-
-    if (shouldDisplay) {
-      const row = document.createElement('tr');
-      for (let j = 0; j < headers.length; j++) {
-        const cell = document.createElement('td');
-        cell.textContent = rowData[j];
-        row.appendChild(cell);
-      }
-      tableBody.appendChild(row);
+        tableBody.appendChild(newRow);
+      });
+    } catch (error) {
+      console.error("Erro ao carregar os dados:", error);
     }
   }
-}
 
-// Attach event listeners to search fields
-const searchFields = document.querySelectorAll('.form-control');
-searchFields.forEach(field => {
-  field.addEventListener('input', fetchData);
-});
+  // Chamar a função quando a página carregar
+  document.addEventListener("DOMContentLoaded", () => {
+    loadAndDisplayData();
+  });
 
-// Initial data fetch
-fetchData();
+  // Atualizar a tabela ao pesquisar
+  searchInput.addEventListener("input", () => {
+    const searchTerm = searchInput.value.toLowerCase();
+    const rows = tableBody.getElementsByTagName("tr");
+
+    for (const row of rows) {
+      const rowData = row.textContent.toLowerCase();
+      if (rowData.includes(searchTerm)) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    }
+  });
 </script>
 
 </body>
