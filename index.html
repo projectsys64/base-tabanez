@@ -38,6 +38,10 @@
       <label for="searchIndicacao" class="form-label"><b>Indicação:</b></label>
       <input type="text" id="searchIndicacao" class="form-control" placeholder="Pesquisar por Indicação">
     </div>
+    <div class="col">
+      <label for="searchCurriculo" class="form-label"><b>Currículo:</b></label>
+      <input type="text" id="searchCurriculo" class="form-control" placeholder="Pesquisar por Currículo">
+    </div>
   </div>
   
   <!-- Tabela para exibir dados -->
@@ -50,6 +54,7 @@
         <th>Função</th>
         <th>Empresa</th>
         <th>Indicação</th>
+        <th>Currículo</th>
       </tr>
     </thead>
     <tbody id="tableBody">
@@ -66,6 +71,7 @@
   const searchFuncao = document.getElementById("searchFuncao");
   const searchEmpresa = document.getElementById("searchEmpresa");
   const searchIndicacao = document.getElementById("searchIndicacao");
+  const searchCurriculo = document.getElementById("searchCurriculo");
   const tableBody = document.getElementById("tableBody");
 
   // Função para carregar os dados do arquivo CSV
@@ -85,6 +91,7 @@
         const funcao = columns[3];
         const empresa = columns[4];
         const indicacao = columns[5];
+        const curriculo = columns[6];
 
         const newRow = document.createElement("tr");
         newRow.innerHTML = `
@@ -94,6 +101,7 @@
           <td>${funcao}</td>
           <td>${empresa}</td>
           <td>${indicacao}</td>
+          <td>${curriculo}</td>
         `;
 
         tableBody.appendChild(newRow);
@@ -116,6 +124,7 @@
     const searchFuncaoValue = searchFuncao.value.toLowerCase();
     const searchEmpresaValue = searchEmpresa.value.toLowerCase();
     const searchIndicacaoValue = searchIndicacao.value.toLowerCase();
+    const searchCurriculoValue = searchCurriculo.value.toLowerCase();
     const rows = tableBody.getElementsByTagName("tr");
 
     for (const row of rows) {
@@ -126,8 +135,9 @@
       const funcaoCell = rowData.includes(searchFuncaoValue);
       const empresaCell = rowData.includes(searchEmpresaValue);
       const indicacaoCell = rowData.includes(searchIndicacaoValue);
+      const curriculoCell = rowData.includes(searchCurriculoValue);
       
-      if (nomeCell && telefoneCell && emailCell && funcaoCell && empresaCell && indicacaoCell) {
+      if (nomeCell && telefoneCell && emailCell && funcaoCell && empresaCell && indicacaoCell && curriculoCell) {
         row.style.display = "";
       } else {
         row.style.display = "none";
@@ -142,6 +152,7 @@
   searchFuncao.addEventListener("input", updateTable);
   searchEmpresa.addEventListener("input", updateTable);
   searchIndicacao.addEventListener("input", updateTable);
+  searchCurriculo.addEventListener("input", updateTable);
 </script>
 
 </body>
