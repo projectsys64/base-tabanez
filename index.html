@@ -13,29 +13,31 @@
   <h1>Filtrar e exibir dados da planilha</h1>
   
   <!-- Campos de pesquisa -->
-  <div class="mb-2">
-    <label for="searchNome" class="form-label">Nome:</label>
-    <input type="text" id="searchNome" class="form-control" placeholder="Pesquisar por Nome">
-  </div>
-  <div class="mb-2">
-    <label for="searchTelefone" class="form-label">Telefone:</label>
-    <input type="text" id="searchTelefone" class="form-control" placeholder="Pesquisar por Telefone">
-  </div>
-  <div class="mb-2">
-    <label for="searchEmail" class="form-label">Email:</label>
-    <input type="text" id="searchEmail" class="form-control" placeholder="Pesquisar por Email">
-  </div>
-  <div class="mb-2">
-    <label for="searchFuncao" class="form-label">Função:</label>
-    <input type="text" id="searchFuncao" class="form-control" placeholder="Pesquisar por Função">
-  </div>
-  <div class="mb-2">
-    <label for="searchEmpresa" class="form-label">Empresa:</label>
-    <input type="text" id="searchEmpresa" class="form-control" placeholder="Pesquisar por Empresa">
-  </div>
-  <div class="mb-2">
-    <label for="searchIndicacao" class="form-label">Indicação:</label>
-    <input type="text" id="searchIndicacao" class="form-control" placeholder="Pesquisar por Indicação">
+  <div class="row mb-2">
+    <div class="col">
+      <label for="searchNome" class="form-label"><b>Nome:</b></label>
+      <input type="text" id="searchNome" class="form-control" placeholder="Pesquisar por Nome">
+    </div>
+    <div class="col">
+      <label for="searchTelefone" class="form-label"><b>Telefone:</b></label>
+      <input type="text" id="searchTelefone" class="form-control" placeholder="Pesquisar por Telefone">
+    </div>
+    <div class="col">
+      <label for="searchEmail" class="form-label"><b>Email:</b></label>
+      <input type="text" id="searchEmail" class="form-control" placeholder="Pesquisar por Email">
+    </div>
+    <div class="col">
+      <label for="searchFuncao" class="form-label"><b>Função:</b></label>
+      <input type="text" id="searchFuncao" class="form-control" placeholder="Pesquisar por Função">
+    </div>
+    <div class="col">
+      <label for="searchEmpresa" class="form-label"><b>Empresa:</b></label>
+      <input type="text" id="searchEmpresa" class="form-control" placeholder="Pesquisar por Empresa">
+    </div>
+    <div class="col">
+      <label for="searchIndicacao" class="form-label"><b>Indicação:</b></label>
+      <input type="text" id="searchIndicacao" class="form-control" placeholder="Pesquisar por Indicação">
+    </div>
   </div>
   
   <!-- Tabela para exibir dados -->
@@ -71,7 +73,7 @@
     try {
       const response = await fetch("base.csv"); // Assumindo que o arquivo "base.csv" está na mesma pasta que o HTML
       const csvData = await response.text();
-      const rows = csvData.split("\n");
+      const rows = csvData.split("\n").slice(1); // Ignorar a primeira linha (nomes)
 
       // Preencher a tabela com os dados
       tableBody.innerHTML = "";
