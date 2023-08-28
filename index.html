@@ -26,7 +26,7 @@
       </tr>
     </thead>
     <tbody id="tableBody">
-      <!-- Os dados do arquivo CSV serão preenchidos aqui -->
+      <!-- Os dados da planilha serão preenchidos aqui -->
     </tbody>
   </table>
 </div>
@@ -36,36 +36,35 @@
   const searchInput = document.getElementById("searchInput");
   const tableBody = document.getElementById("tableBody");
 
-  // Função para carregar e exibir dados do arquivo CSV
-  function loadAndDisplayData() {
-    fetch("base.csv")
-      .then(response => response.text())
-      .then(csvData => {
-        const rows = csvData.split("\n");
+  // Função para carregar os dados do arquivo CSV
+  async function loadAndDisplayData() {
+    try {
+      const response = await fetch("base.csv"); // Assumindo que o arquivo "base.csv" está na mesma pasta que o HTML
+      const csvData = await response.text();
+      const rows = csvData.split("\n");
 
-        // Preencher a tabela com os dados
-        tableBody.innerHTML = "";
-        rows.forEach(row => {
-          const columns = row.split(",");
-          const name = columns[0];
-          const age = columns[1];
-          const email = columns[2];
-          const city = columns[3];
+      // Preencher a tabela com os dados
+      tableBody.innerHTML = "";
+      rows.forEach(row => {
+        const columns = row.split(",");
+        const name = columns[0];
+        const age = columns[1];
+        const email = columns[2];
+        const city = columns[3];
 
-          const newRow = document.createElement("tr");
-          newRow.innerHTML = `
-            <td>${name}</td>
-            <td>${age}</td>
-            <td>${email}</td>
-            <td>${city}</td>
-          `;
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+          <td>${name}</td>
+          <td>${age}</td>
+          <td>${email}</td>
+          <td>${city}</td>
+        `;
 
-          tableBody.appendChild(newRow);
-        });
-      })
-      .catch(error => {
-        console.error("Erro ao carregar os dados:", error);
+        tableBody.appendChild(newRow);
       });
+    } catch (error) {
+      console.error("Erro ao carregar os dados:", error);
+    }
   }
 
   // Chamar a função quando a página carregar
