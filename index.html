@@ -26,20 +26,20 @@
       </tr>
     </thead>
     <tbody id="tableBody">
-      <!-- Os dados da planilha serão preenchidos aqui -->
+      <!-- Os dados do arquivo CSV serão preenchidos aqui -->
     </tbody>
   </table>
 </div>
 
 <script>
-  // URL da planilha CSV
-  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTzV8s4dSeYNg9h5-vDDoOHL4QpWjiAO07KF9FvLRlI_ZMFBZyJLDY1UjQLXCinRGMLUL4tDT-vZFDl/pub?output=csv";
+  // URL do arquivo CSV (ajuste o nome conforme necessário)
+  const csvUrl = "seuarquivo.csv";
   
   // Elementos HTML
   const searchInput = document.getElementById("searchInput");
   const tableBody = document.getElementById("tableBody");
 
-  // Função para carregar os dados da planilha e criar a tabela
+  // Função para carregar os dados do arquivo CSV e criar a tabela
   async function loadAndDisplayData() {
     try {
       const response = await fetch(csvUrl);
