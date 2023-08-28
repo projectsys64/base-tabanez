@@ -1,62 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Filtro de Dados</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-  <div class="container mt-5">
-    <h1>Filtro de Dados</h1>
-    <input type="text" id="searchInput" class="form-control mt-3" placeholder="Digite o termo de pesquisa...">
-    <table class="table table-bordered mt-3">
-      <thead>
-        <tr>
-          <th>Coluna A</th>
-          <th>Coluna B</th>
-          <!-- Adicione as outras colunas aqui -->
-        </tr>
-      </thead>
-      <tbody id="dataBody">
-        <!-- Os dados serão preenchidos aqui -->
-      </tbody>
-    </table>
+<div class="container my-5">
+
+  <div class="row">
+
+    <div class="col-md-7 mb-4 mb-md-0">
+
+      <div class="text-center mb-4">
+        <a class="btn btn-primary mb-4" target="_blank" href="https://docs.google.com/spreadsheets/d/1MjMoMbuRJqnrfhxjetvdny-dnsFfmLJX24OWiSFUYvk" role="button"
+           >Click to see the source sheet</a
+          >
+
+        <p>The data in the table below was imported from Google Spreadsheet. Thanks to this, they can be edited by editing this sheet, and the changes will be reflected in the html table.</p>
+
+      </div>
+
+      <!-- Table -->
+      <table class="table table-striped mb-0">
+        <thead id="table-head"></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+
+    </div>
+
+    <div class="col-md-5 mb-4 mb-md-0 text-center">
+
+      <p class="font-weight-bold"><strong>Watch the tutorial </strong></p>
+  
+        <a href="" target="_blank" class="btn btn-lg btn-danger">
+        <i class="fab fa-youtube mr-3"></i>Watch on youtube
+        </a>
+   
+
+    </div>
+
   </div>
 
-  <script>
-    const SPREADSHEET_ID = '17YYoTpvzocXjQRpeL76buZDEdpKZktp5l2wDwL79bDc';
-    const API_KEY = 'AIzaSyBLOUP4v9qIndYOMS7FMmwlfYUX_p8Y5kY';
+  <hr class="mt-5">
 
-    function updateData(values) {
-      const searchInput = document.getElementById('searchInput');
-      const dataBody = document.getElementById('dataBody');
+  <p>Built with <a target="_blank" href="https://mdbootstrap.com/">Material Design for Bootstrap</a> - free and powerful Bootstrap UI KIT</p>
 
-      searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase();
-        dataBody.innerHTML = '';
+  <a class="btn btn-danger me-2" href="https://mdbootstrap.com/" target="_blank" role="button">Download MDB UI KIT</a>
+  <a class="btn btn-success me-2" target="_blank" href="https://mdbootstrap.com/docs/standard/getting-started/" role="button">Tutorials</a>
+  <a class="btn btn-dark mr-2" target="_blank" href="https://github.com/mdbootstrap/mdb-ui-kit" role="button">GitHub <i class="fab fa-github ml-2"></i></a>
 
-        values.forEach(row => {
-          const rowData = row.slice(0, 15); // Considerando colunas A até O
-          const match = rowData.some(cell => cell.toLowerCase().includes(searchTerm));
-          if (match) {
-            const rowHtml = rowData.map(cell => `<td>${cell}</td>`).join('');
-            dataBody.innerHTML += `<tr>${rowHtml}</tr>`;
-          }
-        });
-      });
-    }
 
-    function fetchData() {
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A:O?key=${API_KEY}`;
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          const values = data.values;
-          updateData(values);
-        })
-        .catch(error => console.error('Erro ao buscar dados:', error));
-    }
-
-    fetchData();
-  </script>
-</body>
-</html>
+</div>
