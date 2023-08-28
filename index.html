@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Filtrar Dados da Planilha</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .container {
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Filtrar Dados da Planilha</h2>
+  
+  <div class="form-group">
+    <div class="input-group">
+      <input type="text" class="form-control" id="searchInput" placeholder="Digite o termo de pesquisa...">
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" onclick="applyFilter()">Filtrar</button>
+      </div>
+    </div>
+  </div>
+  
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Dados da Planilha</th>
+      </tr>
+    </thead>
+    <tbody id="dataBody">
+      <!-- Dados da planilha serão exibidos aqui -->
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.6.1/tabletop.min.js"></script>
+<script>
+  function updateData(data) {
+    var dataBody = document.getElementById("dataBody");
+    dataBody.innerHTML = "";
+    
+    data.forEach(function(row) {
+      var newRow = document.createElement("tr");
+      var cell = document.createElement("td");
+      cell.textContent = row["Dados da Planilha"];
+      newRow.appendChild(cell);
+      dataBody.appendChild(newRow);
+    });
+  }
+  
+  function applyFilter() {
+    var searchTerm = document.getElementById("searchInput").value.toLowerCase();
+    var filteredData = data.filter(function(row) {
+      return row["Dados da Planilha"].toLowerCase().includes(searchTerm);
+    });
+    updateData(filteredData);
+  }
+  
+  var spreadsheetUrl = "https://docs.google.com/spreadsheets/d/17YYoTpvzocXjQRpeL76buZDEdpKZktp5l2wDwL79bDc/edit?usp=sharing";
+  
+  function init() {
+    Tabletop.init({
+      key: spreadsheetUrl,
+      callback: function(data, tabletop) {
+        window.data = data;
+        updateData(data);
+      },
+      simpleSheet: true
+    });
+  }
+  
+  init();
+</script>
+
+</body>
+</html>
