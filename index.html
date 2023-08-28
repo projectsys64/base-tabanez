@@ -23,32 +23,37 @@
   </div>
 
   <script>
-    const searchInput = document.getElementById('searchInput');
-    const dataBody = document.getElementById('dataBody');
+    function updateData(data) {
+      const searchInput = document.getElementById('searchInput');
+      const dataBody = document.getElementById('dataBody');
+      const parsedData = JSON.parse(data);
 
-    searchInput.addEventListener('input', () => {
-      const searchTerm = searchInput.value.toLowerCase();
-      dataBody.innerHTML = '';
+      searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        dataBody.innerHTML = '';
 
-      const iframe = document.createElement('iframe');
-      iframe.src = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTzV8s4dSeYNg9h5-vDDoOHL4QpWjiAO07KF9FvLRlI_ZMFBZyJLDY1UjQLXCinRGMLUL4tDT-vZFDl/pubhtml?widget=true&headers=false";
-
-      iframe.onload = () => {
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-        const rows = iframeDoc.querySelectorAll('tr');
-
-        rows.forEach(row => {
-          const cells = row.querySelectorAll('td');
-          const rowData = Array.from(cells).map(cell => cell.textContent);
+        parsedData.forEach(row => {
+          const rowData = row.slice(0, 15); // Considerando colunas A até O
           const match = rowData.some(cell => cell.toLowerCase().includes(searchTerm));
           if (match) {
-            dataBody.appendChild(row.cloneNode(true));
+            const rowHtml = rowData.map(cell => `<td>${cell}</td>`).join('');
+            dataBody.innerHTML += `<tr>${rowHtml}</tr>`;
           }
         });
-      };
+      });
+    }
 
-      document.body.appendChild(iframe);
-    });
+    function fetchData() {
+      const url = 'https://script.google.com/macros/s/AKfycbxZR5uoRDTDinyozwb6CKIiEK802cgta2UFQkOGdGkeQgT3ohjwlsv_Nybb1w3FRHm7/exec'; // Substitua pela URL da Web App gerada no Passo 2
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          updateData(data);
+        })
+        .catch(error => console.error('Erro ao buscar dados:', error));
+    }
+
+    fetchData();
   </script>
 </body>
 </html>
