@@ -1,82 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Filtrar Dados da Planilha</title>
+  <title>Filtro de Dados</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    .container {
-      margin-top: 50px;
-    }
-  </style>
 </head>
 <body>
-
-<div class="container">
-  <h2>Filtrar Dados da Planilha</h2>
-  
-  <div class="form-group">
-    <div class="input-group">
-      <input type="text" class="form-control" id="searchInput" placeholder="Digite o termo de pesquisa...">
-      <div class="input-group-append">
-        <button class="btn btn-primary" type="button" onclick="applyFilter()">Filtrar</button>
-      </div>
-    </div>
+  <div class="container mt-5">
+    <h1>Filtro de Dados</h1>
+    <input type="text" id="searchInput" class="form-control mt-3" placeholder="Digite o termo de pesquisa...">
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr>
+          <th>Coluna A</th>
+          <th>Coluna B</th>
+          <!-- Adicione as outras colunas aqui -->
+        </tr>
+      </thead>
+      <tbody id="dataBody">
+        <!-- Os dados serão preenchidos aqui -->
+      </tbody>
+    </table>
   </div>
-  
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Dados da Planilha</th>
-      </tr>
-    </thead>
-    <tbody id="dataBody">
-      <!-- Dados da planilha serão exibidos aqui -->
-    </tbody>
-  </table>
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-<script>
-  var spreadsheetUrl = "https://docs.google.com/spreadsheets/d/17YYoTpvzocXjQRpeL76buZDEdpKZktp5l2wDwL79bDc/gviz/tq?tqx=out:csv";
-  var data = []; // Array para armazenar os dados da planilha
+  <script>
+    const SPREADSHEET_ID = '17YYoTpvzocXjQRpeL76buZDEdpKZktp5l2wDwL79bDc';
+    const API_KEY = 'AIzaSyBLOUP4v9qIndYOMS7FMmwlfYUX_p8Y5kY';
 
-  function updateData(filteredData) {
-    var dataBody = document.getElementById("dataBody");
-    dataBody.innerHTML = "";
+    function fetchSheetData() {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A:O?key=${API_KEY}`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const values = data.values;
+          const searchInput = document.getElementById('searchInput');
+          const dataBody = document.getElementById('dataBody');
+          
+          searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            dataBody.innerHTML = '';
 
-    filteredData.forEach(function(row) {
-      var newRow = document.createElement("tr");
-      var cell = document.createElement("td");
-      cell.textContent = row;
-      newRow.appendChild(cell);
-      dataBody.appendChild(newRow);
-    });
-  }
+            values.forEach(row => {
+              const rowData = row.slice(0, 15); // Considerando colunas A até O
+              const match = rowData.some(cell => cell.toLowerCase().includes(searchTerm));
+              if (match) {
+                const rowHtml = rowData.map(cell => `<td>${cell}</td>`).join('');
+                dataBody.innerHTML += `<tr>${rowHtml}</tr>`;
+              }
+            });
+          });
+        });
+    }
 
-  function applyFilter() {
-    var searchTerm = document.getElementById("searchInput").value.toLowerCase();
-    var filteredData = data.filter(function(row) {
-      return row.toLowerCase().includes(searchTerm);
-    });
-    updateData(filteredData);
-  }
-
-  function loadData() {
-    Papa.parse(spreadsheetUrl, {
-      download: true,
-      header: true,
-      dynamicTyping: true,
-      complete: function(results) {
-        data = results.data["Dados da Planilha"];
-        updateData(data);
-      }
-    });
-  }
-
-  loadData();
-</script>
-
+    fetchSheetData();
+  </script>
 </body>
 </html>
