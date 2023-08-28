@@ -37,43 +37,45 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.6.1/tabletop.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
-  function updateData(data) {
+  var spreadsheetUrl = "https://docs.google.com/spreadsheets/d/17YYoTpvzocXjQRpeL76buZDEdpKZktp5l2wDwL79bDc/gviz/tq?tqx=out:csv";
+  var data = []; // Array para armazenar os dados da planilha
+
+  function updateData(filteredData) {
     var dataBody = document.getElementById("dataBody");
     dataBody.innerHTML = "";
-    
-    data.forEach(function(row) {
+
+    filteredData.forEach(function(row) {
       var newRow = document.createElement("tr");
       var cell = document.createElement("td");
-      cell.textContent = row["Dados da Planilha"];
+      cell.textContent = row;
       newRow.appendChild(cell);
       dataBody.appendChild(newRow);
     });
   }
-  
+
   function applyFilter() {
     var searchTerm = document.getElementById("searchInput").value.toLowerCase();
     var filteredData = data.filter(function(row) {
-      return row["Dados da Planilha"].toLowerCase().includes(searchTerm);
+      return row.toLowerCase().includes(searchTerm);
     });
     updateData(filteredData);
   }
-  
-  var spreadsheetUrl = "https://docs.google.com/spreadsheets/d/17YYoTpvzocXjQRpeL76buZDEdpKZktp5l2wDwL79bDc/edit?usp=sharing";
-  
-  function init() {
-    Tabletop.init({
-      key: spreadsheetUrl,
-      callback: function(data, tabletop) {
-        window.data = data;
+
+  function loadData() {
+    Papa.parse(spreadsheetUrl, {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      complete: function(results) {
+        data = results.data["Dados da Planilha"];
         updateData(data);
-      },
-      simpleSheet: true
+      }
     });
   }
-  
-  init();
+
+  loadData();
 </script>
 
 </body>
