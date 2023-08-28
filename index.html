@@ -23,16 +23,18 @@
   </div>
 
   <script>
-    function updateData(data) {
+    const SPREADSHEET_ID = '17YYoTpvzocXjQRpeL76buZDEdpKZktp5l2wDwL79bDc';
+    const API_KEY = 'AIzaSyBLOUP4v9qIndYOMS7FMmwlfYUX_p8Y5kY';
+
+    function updateData(values) {
       const searchInput = document.getElementById('searchInput');
       const dataBody = document.getElementById('dataBody');
-      const parsedData = JSON.parse(data);
 
       searchInput.addEventListener('input', () => {
         const searchTerm = searchInput.value.toLowerCase();
         dataBody.innerHTML = '';
 
-        parsedData.forEach(row => {
+        values.forEach(row => {
           const rowData = row.slice(0, 15); // Considerando colunas A até O
           const match = rowData.some(cell => cell.toLowerCase().includes(searchTerm));
           if (match) {
@@ -44,11 +46,12 @@
     }
 
     function fetchData() {
-      const url = 'https://script.google.com/macros/s/AKfycbxZR5uoRDTDinyozwb6CKIiEK802cgta2UFQkOGdGkeQgT3ohjwlsv_Nybb1w3FRHm7/exec'; // Substitua pela URL da Web App gerada no Passo 2
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A:O?key=${API_KEY}`;
       fetch(url)
         .then(response => response.json())
         .then(data => {
-          updateData(data);
+          const values = data.values;
+          updateData(values);
         })
         .catch(error => console.error('Erro ao buscar dados:', error));
     }
