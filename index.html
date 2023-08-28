@@ -26,32 +26,36 @@
     const SPREADSHEET_ID = '17YYoTpvzocXjQRpeL76buZDEdpKZktp5l2wDwL79bDc';
     const API_KEY = 'AIzaSyBLOUP4v9qIndYOMS7FMmwlfYUX_p8Y5kY';
 
-    function fetchSheetData() {
+    function updateData(values) {
+      const searchInput = document.getElementById('searchInput');
+      const dataBody = document.getElementById('dataBody');
+
+      searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        dataBody.innerHTML = '';
+
+        values.forEach(row => {
+          const rowData = row.slice(0, 15); // Considerando colunas A até O
+          const match = rowData.some(cell => cell.toLowerCase().includes(searchTerm));
+          if (match) {
+            const rowHtml = rowData.map(cell => `<td>${cell}</td>`).join('');
+            dataBody.innerHTML += `<tr>${rowHtml}</tr>`;
+          }
+        });
+      });
+    }
+
+    function fetchData() {
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A:O?key=${API_KEY}`;
       fetch(url)
         .then(response => response.json())
         .then(data => {
           const values = data.values;
-          const searchInput = document.getElementById('searchInput');
-          const dataBody = document.getElementById('dataBody');
-          
-          searchInput.addEventListener('input', () => {
-            const searchTerm = searchInput.value.toLowerCase();
-            dataBody.innerHTML = '';
-
-            values.forEach(row => {
-              const rowData = row.slice(0, 15); // Considerando colunas A até O
-              const match = rowData.some(cell => cell.toLowerCase().includes(searchTerm));
-              if (match) {
-                const rowHtml = rowData.map(cell => `<td>${cell}</td>`).join('');
-                dataBody.innerHTML += `<tr>${rowHtml}</tr>`;
-              }
-            });
-          });
+          updateData(values);
         });
     }
 
-    fetchSheetData();
+    fetchData();
   </script>
 </body>
 </html>
