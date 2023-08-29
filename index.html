@@ -26,6 +26,10 @@
               <label for="password">Senha</label>
               <input type="password" class="form-control" id="password" name="password" required>
             </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="rememberCheck">
+              <label class="form-check-label" for="rememberCheck">Lembrar dados de login</label>
+            </div>
             <button type="submit" class="btn btn-primary btn-block">Entrar</button>
           </form>
           <div id="error-message" class="mt-3 alert alert-danger d-none">Credenciais inválidas. Tente novamente.</div>
@@ -36,14 +40,38 @@
 </div>
 
 <script>
-  document.getElementById("loginForm").addEventListener("submit", function(event) {
+  const loginForm = document.getElementById("loginForm");
+  const rememberCheck = document.getElementById("rememberCheck");
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+
+  // Restaurar dados de login se necessário
+  if (localStorage.getItem("rememberLogin")) {
+    rememberCheck.checked = true;
+    usernameInput.value = localStorage.getItem("savedUsername");
+    passwordInput.value = localStorage.getItem("savedPassword");
+  }
+
+  loginForm.addEventListener("submit", function(event) {
     event.preventDefault();
 
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+    const username = usernameInput.value;
+    const password = passwordInput.value;
     const errorMessage = document.getElementById("error-message");
 
     if (username === "teste" && password === "teste") {
+      if (rememberCheck.checked) {
+        // Salvar dados de login se a opção "Lembrar dados de login" estiver marcada
+        localStorage.setItem("rememberLogin", true);
+        localStorage.setItem("savedUsername", username);
+        localStorage.setItem("savedPassword", password);
+      } else {
+        // Limpar os dados de login salvos, se a opção não estiver marcada
+        localStorage.removeItem("rememberLogin");
+        localStorage.removeItem("savedUsername");
+        localStorage.removeItem("savedPassword");
+      }
+
       // Redirecionar para a página do painel em caso de login correto
       window.location.href = "painel.html";
     } else {
