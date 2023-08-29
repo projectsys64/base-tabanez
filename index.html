@@ -3,22 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pesquisar - Banco de vagas Tabanez DF</title>
+  <title>Filtrar e exibir dados da planilha</title>
   <!-- Adicione os links para as bibliotecas Bootstrap e JavaScript -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-  <style>
-  /* Aumentar a largura de todos os elementos em 15 pixels */
-  .form-control, .table {
-    width: calc(100% + 25px) !important;
-    max-width: none !important;
-  }
-</style>
-
 
 <div class="container mt-5">
-  <h1>Pesquisar - Banco de vagas Tabanez DF</h1>
+  <h1>Filtrar e exibir dados da planilha</h1>
   
   <!-- Campos de pesquisa -->
   <div class="row mb-2">
@@ -93,13 +85,13 @@
       tableBody.innerHTML = "";
       rows.forEach(row => {
         const columns = row.split(",");
-        const nome = columns[1];
-        const telefone = columns[2];
-        const email = columns[3];
-        const funcao = columns[10];
-        const empresa = columns[8];
-        const indicacao = columns[7];
-        const curriculo = columns[14];
+        const nome = columns[0];
+        const telefone = columns[1];
+        const email = columns[2];
+        const funcao = columns[3];
+        const empresa = columns[4];
+        const indicacao = columns[5];
+        const curriculo = columns[6];
 
         const newRow = document.createElement("tr");
         newRow.innerHTML = `
@@ -109,7 +101,7 @@
           <td>${funcao}</td>
           <td>${empresa}</td>
           <td>${indicacao}</td>
-          <td>${curriculo}</td>
+          <td><a href="${curriculo}" target="_blank">Ver currículo</a></td>
         `;
 
         tableBody.appendChild(newRow);
