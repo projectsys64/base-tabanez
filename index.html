@@ -7,7 +7,12 @@
   <!-- Adicione os links para as bibliotecas Bootstrap e JavaScript -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <style>
-    /* Estilos personalizados para ajustar a largura dos campos de pesquisa */
+    /* Estilo para alinhar campos de pesquisa com as colunas da tabela */
+    .search-label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0;
+    }
     .search-input {
       width: 100%;
     }
@@ -21,31 +26,31 @@
   <!-- Campos de pesquisa -->
   <div class="row mb-3">
     <div class="col-md">
-      <label for="searchNome" class="form-label"><b>Nome:</b></label>
+      <label for="searchNome" class="search-label"><b>Nome:</b></label>
       <input type="text" id="searchNome" class="form-control search-input" placeholder="Pesquisar por Nome">
     </div>
     <div class="col-md">
-      <label for="searchTelefone" class="form-label"><b>Telefone:</b></label>
+      <label for="searchTelefone" class="search-label"><b>Telefone:</b></label>
       <input type="text" id="searchTelefone" class="form-control search-input" placeholder="Pesquisar por Telefone">
     </div>
     <div class="col-md">
-      <label for="searchEmail" class="form-label"><b>Email:</b></label>
+      <label for="searchEmail" class="search-label"><b>Email:</b></label>
       <input type="text" id="searchEmail" class="form-control search-input" placeholder="Pesquisar por Email">
     </div>
     <div class="col-md">
-      <label for="searchFuncao" class="form-label"><b>Função:</b></label>
+      <label for="searchFuncao" class="search-label"><b>Função:</b></label>
       <input type="text" id="searchFuncao" class="form-control search-input" placeholder="Pesquisar por Função">
     </div>
     <div class="col-md">
-      <label for="searchEmpresa" class="form-label"><b>Empresa:</b></label>
+      <label for="searchEmpresa" class="search-label"><b>Empresa:</b></label>
       <input type="text" id="searchEmpresa" class="form-control search-input" placeholder="Pesquisar por Empresa">
     </div>
     <div class="col-md">
-      <label for="searchIndicacao" class="form-label"><b>Indicação:</b></label>
+      <label for="searchIndicacao" class="search-label"><b>Indicação:</b></label>
       <input type="text" id="searchIndicacao" class="form-control search-input" placeholder="Pesquisar por Indicação">
     </div>
     <div class="col-md">
-      <label for="searchCurriculo" class="form-label"><b>Currículo:</b></label>
+      <label for="searchCurriculo" class="search-label"><b>Currículo:</b></label>
       <input type="text" id="searchCurriculo" class="form-control search-input" placeholder="Pesquisar por Currículo">
     </div>
   </div>
@@ -100,7 +105,7 @@
         const funcao = columns[3];
         const empresa = columns[4];
         const indicacao = columns[5];
-        const curriculo = columns[14];
+        const curriculo = columns[6];
 
         const newRow = document.createElement("tr");
         newRow.innerHTML = `
