@@ -60,6 +60,11 @@
   const searchFuncao = document.getElementById("searchFuncao");
   const tableBody = document.getElementById("tableBody");
 
+  // Função para escapar caracteres especiais em expressões regulares
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
   // Função para carregar os dados do arquivo CSV
   async function loadAndDisplayData() {
     try {
@@ -104,18 +109,18 @@
 
   // Atualizar a tabela ao pesquisar
   function updateTable() {
-    const searchNomeValue = searchNome.value.toLowerCase();
-    const searchTelefoneValue = searchTelefone.value.toLowerCase();
-    const searchEmailValue = searchEmail.value.toLowerCase();
-    const searchFuncaoValue = searchFuncao.value.toLowerCase();
+    const searchNomeValue = escapeRegExp(searchNome.value.trim());
+    const searchTelefoneValue = escapeRegExp(searchTelefone.value.trim());
+    const searchEmailValue = escapeRegExp(searchEmail.value.trim());
+    const searchFuncaoValue = escapeRegExp(searchFuncao.value.trim());
     const rows = tableBody.getElementsByTagName("tr");
 
     for (const row of rows) {
       const rowData = row.textContent.toLowerCase();
-      const nomeCell = rowData.includes(searchNomeValue);
-      const telefoneCell = rowData.includes(searchTelefoneValue);
-      const emailCell = rowData.includes(searchEmailValue);
-      const funcaoCell = rowData.includes(searchFuncaoValue);
+      const nomeCell = new RegExp(searchNomeValue, 'i').test(rowData);
+      const telefoneCell = new RegExp(searchTelefoneValue, 'i').test(rowData);
+      const emailCell = new RegExp(searchEmailValue, 'i').test(rowData);
+      const funcaoCell = new RegExp(searchFuncaoValue, 'i').test(rowData);
       
       if (nomeCell && telefoneCell && emailCell && funcaoCell) {
         row.style.display = "";
